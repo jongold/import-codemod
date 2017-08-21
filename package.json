@@ -1,0 +1,48 @@
+{
+  "name": "primitives-codemods",
+  "version": "0.0.0",
+  "description": "Codemods for working with React Primitives",
+  "license": "MIT",
+  "repository": "github:jongold/primitives-codemods",
+  "bugs": "https://github.com/jongold/primitives-codemods/issues",
+  "author": {
+    "name": "Jon Gold",
+    "email": "hello@designedbygold.com"
+  },
+  "files": [
+    "lib"
+  ],
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "precommit": "lint-staged",
+    "lint": "eslint src",
+    "prepublish": "babel src --out-dir lib",
+    "jest": "jest src",
+    "test": "npm run lint && npm run jest"
+  },
+  "dependencies": {
+    "ramda": "^0.24.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.3",
+    "babel-jest": "^19.0.0",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-airbnb": "^2.4.0",
+    "eslint": "^3.19.0 || ^4.3.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-prettier": "^1.5.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "husky": "^0.13.3",
+    "jest": "^19.0.2",
+    "jscodeshift": "^0.3.30",
+    "lint-staged": "^3.4.0",
+    "npm-release": "^1.0.0",
+    "prettier": "^0.22.0"
+  }
+}
