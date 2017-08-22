@@ -65,6 +65,10 @@ export default function (file, api) {
     true,
   );
 
+  if (!exists(shouldBePrimitives)) {
+    return file.source;
+  }
+
   if (exists(reactPrimitivesImport)) {
     const existingMembers = membersMatchingPred(reactPrimitivesImport, T);
     const targetMembers = uniq([...existingMembers, ...shouldBePrimitives]);
