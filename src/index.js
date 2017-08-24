@@ -1,16 +1,65 @@
 import { T, uniq } from 'ramda';
 
-const PRIMITIVES = [
-  'Animated',
-  'StyleSheet',
-  'View',
-  'Text',
-  'Image',
-  'Touchable',
-  'Platform',
+const mappings = [
+  {
+    from: 'react-native',
+    to: 'react-primitives',
+    modules: [
+      'Animated',
+      'StyleSheet',
+      'View',
+      'Text',
+      'Image',
+      'Touchable',
+      'Platform',
+    ],
+  },
+  {
+    from: 'react-native',
+    to: 'react-native-shared',
+    modules: [
+      'ActionSheetIOS',
+      'Alert',
+      'AppState',
+      'AsyncStorage',
+      'Clipboard',
+      'ColorPropType',
+      'Contacts',
+      'DatePicker',
+      'DeviceEventEmitter',
+      'Dimensions',
+      'Easing',
+      'EventEmitter',
+      'ImagePicker',
+      'InteractionManager',
+      'InvertibleScrollView',
+      'Keyboard',
+      'LayoutAnimation',
+      'Linking',
+      'ListView',
+      'MapView',
+      'NetInfo',
+      'Permissions',
+      'PixelRatio',
+      'ScrollResponder',
+      'ScrollView',
+      'ScrollViewBase',
+      'Slider',
+      'StatusBar',
+      'Swiper',
+      'TextInput',
+      'TouchableHighlight',
+      'TouchableNativeFeedback',
+      'TouchableOpacity',
+      'TouchableWithoutFeedback',
+      'Video',
+      'WebView',
+      'dismissKeyboard',
+      'index',
+      'withNodeHandle',
+    ],
+  },
 ];
-
-const isPrimitive = x => PRIMITIVES.includes(x.node.local.name);
 
 const exists = x => x.length > 0;
 
@@ -52,43 +101,46 @@ export default function (file, api) {
     return results;
   };
 
-  const reactNativeImport = findImport('react-native');
-  const reactPrimitivesImport = findImport('react-primitives');
+  mappings.forEach((mapping) => {
+    const fromImport = findImport(mapping.from);
+    const toImport = findImport(mapping.to);
 
-  if (!exists(reactNativeImport)) {
-    return file.source;
-  }
+    const existsInModule = member =>
+      mapping.modules.includes(member.node.local.name);
 
-  const shouldBePrimitives = membersMatchingPred(
-    reactNativeImport,
-    isPrimitive,
-    true,
-  );
+    if (!exists(fromImport)) {
+      return file.source;
+    }
 
-  if (!exists(shouldBePrimitives)) {
-    return file.source;
-  }
+    const shouldBeMoved = membersMatchingPred(fromImport, existsInModule, true);
 
-  if (exists(reactPrimitivesImport)) {
-    const existingMembers = membersMatchingPred(reactPrimitivesImport, T);
-    const targetMembers = uniq([...existingMembers, ...shouldBePrimitives]);
-    const newImport = makeImport({
-      members: targetMembers,
-      module: 'react-primitives',
-    });
+    if (!exists(shouldBeMoved)) {
+      return file.source;
+    }
 
-    reactPrimitivesImport.replaceWith(newImport);
-  } else {
-    const newImport = makeImport({
-      members: shouldBePrimitives,
-      module: 'react-primitives',
-    });
-    reactNativeImport.insertAfter(newImport);
-  }
+    if (exists(toImport)) {
+      const existingMembers = membersMatchingPred(toImport, T);
+      const targetMembers = uniq([...existingMembers, ...shouldBeMoved]);
+      const newImport = makeImport({
+        members: targetMembers,
+        module: mapping.to,
+      });
 
-  if (emptyImport(findImport('react-native'))) {
-    reactNativeImport.remove();
-  }
+      toImport.replaceWith(newImport);
+    } else {
+      const newImport = makeImport({
+        members: shouldBeMoved,
+        module: mapping.to,
+      });
+      fromImport.insertAfter(newImport);
+    }
+
+    if (emptyImport(findImport(mapping.from))) {
+      fromImport.remove();
+    }
+
+    return false;
+  });
 
   return root.toSource({ quote: 'single' });
 }
