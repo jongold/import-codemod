@@ -1,65 +1,5 @@
-import { T, uniq } from 'ramda';
-
-const mappings = [
-  {
-    from: 'react-native',
-    to: 'react-primitives',
-    modules: [
-      'Animated',
-      'StyleSheet',
-      'View',
-      'Text',
-      'Image',
-      'Touchable',
-      'Platform',
-    ],
-  },
-  {
-    from: 'react-native',
-    to: 'react-native-shared',
-    modules: [
-      'ActionSheetIOS',
-      'Alert',
-      'AppState',
-      'AsyncStorage',
-      'Clipboard',
-      'ColorPropType',
-      'Contacts',
-      'DatePicker',
-      'DeviceEventEmitter',
-      'Dimensions',
-      'Easing',
-      'EventEmitter',
-      'ImagePicker',
-      'InteractionManager',
-      'InvertibleScrollView',
-      'Keyboard',
-      'LayoutAnimation',
-      'Linking',
-      'ListView',
-      'MapView',
-      'NetInfo',
-      'Permissions',
-      'PixelRatio',
-      'ScrollResponder',
-      'ScrollView',
-      'ScrollViewBase',
-      'Slider',
-      'StatusBar',
-      'Swiper',
-      'TextInput',
-      'TouchableHighlight',
-      'TouchableNativeFeedback',
-      'TouchableOpacity',
-      'TouchableWithoutFeedback',
-      'Video',
-      'WebView',
-      'dismissKeyboard',
-      'index',
-      'withNodeHandle',
-    ],
-  },
-];
+import { contains, T, uniq } from 'ramda';
+import config from '../config';
 
 const exists = x => x.length > 0;
 
@@ -101,12 +41,14 @@ export default function (file, api) {
     return results;
   };
 
-  mappings.forEach((mapping) => {
+  config.mappings.forEach((mapping) => {
     const fromImport = findImport(mapping.from);
     const toImport = findImport(mapping.to);
 
+    const containsWildcard = contains('*', mapping.modules);
+
     const existsInModule = member =>
-      mapping.modules.includes(member.node.local.name);
+      (containsWildcard ? true : mapping.modules.includes(member.node.local.name));
 
     if (!exists(fromImport)) {
       return file.source;

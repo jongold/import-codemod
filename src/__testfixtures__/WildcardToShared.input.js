@@ -1,0 +1,1 @@
+import { View, Text, Foo, Bar, Baz } from 'react-native';

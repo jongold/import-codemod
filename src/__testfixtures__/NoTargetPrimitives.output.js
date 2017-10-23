@@ -1,2 +1,2 @@
-import { UIManager, ScrollView } from 'react-native';
+import { ScrollView, UIManager } from 'react-native-shared';
 import X from 'x';

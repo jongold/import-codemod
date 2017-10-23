@@ -16,3 +16,6 @@ defineTest(__dirname, 'index', null, 'NoTargetPrimitives');
 
 // remove an empty ReactNative import
 defineTest(__dirname, 'index', null, 'EmptyReactNativeOutput');
+
+// everything that isn't matched by Primitives should be Shared
+defineTest(__dirname, 'index', null, 'WildcardToShared');
