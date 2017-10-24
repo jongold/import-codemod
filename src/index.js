@@ -1,5 +1,5 @@
 import { contains, T, uniq } from 'ramda';
-import config from '../config';
+import config from './config';
 
 const exists = x => x.length > 0;
 
