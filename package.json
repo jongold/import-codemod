@@ -1,6 +1,6 @@
 {
   "name": "primitives-codemods",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Codemods for working with React Primitives",
   "license": "MIT",
   "repository": "github:jongold/primitives-codemods",
