@@ -22,6 +22,9 @@
     "jest": "jest src",
     "test": "npm run lint && npm run jest"
   },
+  "lint-staged": {
+    "*.js": ["eslint --fix", "git add"]
+  },
   "dependencies": {
     "ramda": "^0.24.1"
   },
