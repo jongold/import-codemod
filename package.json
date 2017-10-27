@@ -1,6 +1,6 @@
 {
   "name": "import-codemod",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Codemod for smushing imports",
   "license": "MIT",
   "repository": "github:jongold/import-codemod",
