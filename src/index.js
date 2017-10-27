@@ -1,5 +1,7 @@
 import path from 'path';
-import { contains, T, uniq } from 'ramda';
+
+const onlyUnique = (value, index, self) => self.indexOf(value) === index;
+const uniq = xs => xs.filter(onlyUnique);
 
 const exists = x => x.length > 0;
 
@@ -80,7 +82,7 @@ export default function (file, api, options) {
       ? specifiers
       : Object.keys(specifiers);
 
-    const containsWildcard = contains('*', fromModules);
+    const containsWildcard = fromModules.includes('*');
 
     const existsInModule = member =>
       (containsWildcard ? true : fromModules.includes(member.node.local.name));
@@ -125,7 +127,7 @@ export default function (file, api, options) {
 
     // if we already have an import declaration for the target
     if (exists(toImport)) {
-      const existingMembers = membersMatchingPred(toImport, T);
+      const existingMembers = membersMatchingPred(toImport, () => true);
       const targetMembers = uniq([...existingMembers, ...newImports]);
       const newImport = makeImport({
         members: targetMembers,
