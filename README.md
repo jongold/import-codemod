@@ -1,16 +1,16 @@
-# import-codemods
+# import-codemod
 
 Flexible codemod for moving around imports.
 
+It's super useful for migrating giant codebases to [`react-primitives`](https://github.com/lelandrichardson/react-primitives/). It might be useful for some other things.
+
 ## Usage
 Create a config file (or use the included `src/configs/config.primitives.js`)
-```
-yarn global add jscodeshift
-yarn add import-codemods
-```
-
 ```bash
-jscodeshift <path> -t ./node_modules/import-codemodes/lib/index.js --config path-to-config.js
+yarn global add jscodeshift
+yarn add import-codemod
+
+jscodeshift <path> -t ./node_modules/import-codemod/lib/index.js --config path-to-config.js
 ```
 
 ## Things it can do 
@@ -42,7 +42,7 @@ module.exports = {
 ```js
 import { Text, View, lots, of, others } from 'react-native';
 // ->
-import { Text, View, lots, of others } from 'react-primitives';
+import { Text, View, lots, of, others } from 'react-primitives';
 ```
 
 `config.js`

@@ -1,10 +1,10 @@
 {
-  "name": "primitives-codemods",
+  "name": "import-codemod",
   "version": "1.0.1",
-  "description": "Codemods for working with React Primitives",
+  "description": "Codemod for smushing imports",
   "license": "MIT",
-  "repository": "github:jongold/primitives-codemods",
-  "bugs": "https://github.com/jongold/primitives-codemods/issues",
+  "repository": "github:jongold/import-codemod",
+  "bugs": "https://github.com/jongold/import-codemod/issues",
   "author": {
     "name": "Jon Gold",
     "email": "hello@designedbygold.com"
