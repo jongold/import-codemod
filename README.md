@@ -1,3 +1,6 @@
+[![npm](https://img.shields.io/npm/v/import-codemod.svg)](https://www.npmjs.com/package/import-codemod)
+[![Travis](https://travis-ci.org/jongold/import-codemod.svg?branch=master)](https://travis-ci.org/jongold/import-codemod)
+
 # import-codemod
 
 Flexible codemod for moving around imports.
