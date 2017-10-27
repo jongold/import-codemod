@@ -1,16 +1,139 @@
-# primitives-codemods
+# import-codemods
 
-Turn this:
-```js
-import { Text, View, Platform, ScrollView } from 'react-native';
+Flexible codemod for moving around imports.
+
+## Usage
+Create a config file (or use the included `src/configs/config.primitives.js`)
 ```
-
-into this:
-```js
-import { ScrollView } from 'react-native';
-import { Text, Platform, View } from 'react-primitives';
+yarn global add jscodeshift
+yarn add import-codemods
 ```
 
 ```bash
-jscodeshift input-file.js -t path-to-primitives-codemods/src/index.js
+jscodeshift <path> -t ./node_modules/import-codemodes/lib/index.js --config path-to-config.js
+```
+
+## Things it can do 
+
+### Move select named imports from one module to another
+```js
+import { Text, View } from 'react-native';
+// ->
+import { Text, View } from 'react-primitives';
+```
+
+`config.js`
+```js
+module.exports = {
+  mappings: [
+    module: {
+      from: 'react-native',
+      to: 'react-primitives',
+    },
+    specifiers: [
+      'Text',
+      'View',
+    ],
+  },
+}
+```
+
+### Move all named imports from one module to another
+```js
+import { Text, View, lots, of, others } from 'react-native';
+// ->
+import { Text, View, lots, of others } from 'react-primitives';
+```
+
+`config.js`
+```js
+module.exports = {
+  mappings: [
+    module: {
+      from: 'react-native',
+      to: 'react-primitives',
+    },
+    specifiers: [
+      '*',
+    ],
+  ],
+}
+```
+
+### Move and rename named imports from one module to another
+```js
+import { Text, View } from 'react-native';
+// ->
+import { Words, Box } from 'react-primitives';
+```
+
+`config.js`
+```js
+module.exports = {
+  mappings: [
+    module: {
+      from: 'react-native',
+      to: 'react-primitives',
+    },
+    specifiers: {
+      'Text': 'Words',
+      'View': 'Box',
+    },
+  ],
+}
+```
+
+### Move default imports from one module to another
+```js
+import Foo from 'foo';
+// ->
+import Foo from 'bar';
+```
+
+`config.js`
+```js
+module.exports = {
+  mappings: [
+    module: {
+      from: 'react-native',
+      to: 'react-primitives',
+    },
+    specifiers: ['default'],
+  ],
+}
+```
+
+### Move default imports from one module to named imports of another
+```js
+import Foo from 'foo';
+// ->
+import { Foo } from 'bar';
+```
+
+`config.js`
+```js
+module.exports = {
+  mappings: [
+    module: {
+      from: 'react-native',
+      to: 'react-primitives',
+    },
+    specifiers: {
+      'default': 'Foo'
+    },
+  ],
+}
+```
+
+## Exclude files from being transformed
+```js
+// @ignoreMe
+…
+```
+`config.js`
+```js
+module.exports = {
+  ignoreMark: '@ignoreMe',
+  mappings: [],
+}
 ```

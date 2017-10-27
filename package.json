@@ -12,6 +12,7 @@
   "files": [
     "lib"
   ],
+  "main": "lib/index.js",
   "engines": {
     "node": ">=6"
   },
