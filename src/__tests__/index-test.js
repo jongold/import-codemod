@@ -140,6 +140,25 @@ describe('config as an object', () => {
     });
     defineTest(__dirname, 'index', opts, 'DefaultToNamed');
   });
+
+  describe('named import to default import', () => {
+    beforeEach(() => {
+      jest.doMock(configPath, () => ({
+        mappings: [
+          {
+            module: {
+              from: 'beatles',
+              to: 'bands',
+            },
+            specifiers: {
+              Beatles: 'default',
+            },
+          },
+        ],
+      }));
+    });
+    defineTest(__dirname, 'index', opts, 'NamedToDefault');
+  });
 });
 
 describe('pattern', () => {

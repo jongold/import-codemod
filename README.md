@@ -14,9 +14,12 @@ yarn global add jscodeshift
 yarn add import-codemod
 
 jscodeshift <path> -t ./node_modules/import-codemod/lib/index.js --config path-to-config.js
+
+## example
+jscodeshift src/ -t ./node_modules/import-codemod/lib/index.js --config ./scripts/my-config.js
 ```
 
-## Things it can do 
+## Things it can do
 
 ### Move select named imports from one module to another
 ```js
@@ -123,6 +126,29 @@ module.exports = {
     },
     specifiers: {
       'default': 'Foo'
+    },
+  ],
+}
+```
+
+
+### Move named imports from one module to default imports of another
+```js
+import { Beatles } from 'bands';
+// ->
+import Beatles from 'beatles';
+```
+
+`config.js`
+```js
+module.exports = {
+  mappings: [
+    module: {
+      from: 'bands',
+      to: 'beatles',
+    },
+    specifiers: {
+      'Beatles': 'default'
     },
   ],
 }
