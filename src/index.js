@@ -33,7 +33,8 @@ export default function (file, api, options) {
 
   // create an import declaration
   const makeImport = ({ members = [], module, defaultName = null }) => {
-    const importSpecifiers = members.map(x =>
+    const validMembers = members.filter(member => member);
+    const importSpecifiers = validMembers.map(x =>
       j.importSpecifier(j.identifier(x)));
 
     const specifiers = defaultName
@@ -78,6 +79,9 @@ export default function (file, api, options) {
     const fromImport = findImport(module.from);
     const toImport = findImport(module.to);
 
+    let defaultName = null;
+    let defaultToNamed = false;
+
     const fromModules = Array.isArray(specifiers)
       ? specifiers
       : Object.keys(specifiers);
@@ -87,16 +91,25 @@ export default function (file, api, options) {
     const existsInModule = member =>
       (containsWildcard ? true : fromModules.includes(member.node.local.name));
 
-    const lookupTargetImport = name =>
-      (Array.isArray(specifiers) ? name : specifiers[name]);
+    const lookupTargetImport = (name) => {
+      if (Array.isArray(specifiers)) {
+        return name;
+      }
+
+      // When changing a named import to default import...
+      if (name !== 'default' && specifiers[name] === 'default') {
+        // Flag it...
+        defaultName = name;
+        // And don't return the named import
+        return '';
+      }
+
+      return specifiers[name];
+    };
 
     const shouldBeMoved = [
       ...membersMatchingPred(fromImport, existsInModule, true),
     ];
-
-    let defaultName = null;
-
-    let defaultToNamed = false;
 
     if (fromModules.includes('default')) {
       const defaults = findImport(module.from).find(j.ImportDefaultSpecifier);
